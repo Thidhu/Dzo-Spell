@@ -1,0 +1,2 @@
+Put your DDC Joyig font here, named exactly:  DDC-Joyig.ttf
+(optional smaller file: DDC-Joyig.woff2)

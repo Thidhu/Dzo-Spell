@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Spell the Stack — བརྩེགས་ཡིག</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Jomolhari&family=Noto+Serif+Tibetan:wght@400;600&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'DDC Joyig';src:url('fonts/DDC-Joyig.woff2') format('woff2'),url('fonts/DDC-Joyig.ttf') format('truetype'),local('DDC Joyig'),local('DDC-Joyig'),local('DDC_Joyig');font-display:swap}
+:root{--g:#1f6a26;--gd:#14451a;--am:#d97706;--bg:#faf8f2;--ink:#1e293b;--mut:#64748b;--ok:#16a34a;--bad:#dc2626;
+ --dz:'DDC Joyig','Jomolhari','Noto Serif Tibetan','Noto Sans Tibetan','Microsoft Himalaya','Kailasa',serif}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Fredoka','DDC Joyig','Jomolhari','Noto Serif Tibetan','Microsoft Himalaya',sans-serif;background:var(--bg);color:var(--ink);
+ padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.dz{font-family:var(--dz);font-weight:400}
+.wrap{max-width:920px;margin:0 auto;padding:1rem}
+header{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between;margin-bottom:1rem}
+h1{font-size:1.5rem;color:var(--gd)} h1 .dz{font-size:1.9rem;color:var(--am);margin-right:.4rem}
+.tabs{display:flex;gap:.5rem}
+.tab,.btn{font:inherit;font-weight:600;border:0;border-radius:99px;padding:.55rem 1.2rem;cursor:pointer;background:#e7efe3;color:var(--gd)}
+.tab.on{background:var(--g);color:#fff}
+.btn.pri{background:var(--g);color:#fff}.btn.amb{background:var(--am);color:#fff}.btn:disabled{opacity:.4;cursor:default}
+.card{background:#fff;border-radius:20px;padding:1.2rem;box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:1rem}
+.hidden{display:none!important}
+/* learn */
+.cat h3{font-size:1.15rem;color:var(--gd)} .cat h3 .dz{font-size:1.5rem;color:var(--am);margin-right:.3rem}
+.cat p{color:var(--mut);margin:.2rem 0 .6rem;font-size:.95rem}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{font-family:var(--dz);font-size:1.9rem;line-height:1.7;padding:0 .8rem;border-radius:14px;border:2px solid #d9e6d4;background:#f4f9f1;cursor:pointer}
+.chip:hover,.chip.on{border-color:var(--am);background:#fff7e8}
+#explain{position:sticky;bottom:0;border:3px solid var(--am);max-height:68vh;overflow:auto}
+.pill{font:inherit;font-weight:600;border:0;border-radius:99px;padding:.45rem 1rem;cursor:pointer;background:#e7efe3;color:var(--gd)}.pill.on{background:var(--g);color:#fff}
+.ctl{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.6rem}.ex{font-family:var(--dz);font-size:1.6rem;margin:0 .5rem}.rr{color:var(--mut);font-size:.9rem}
+.note{background:#fff7e8;border-radius:12px;padding:.5rem .8rem;margin:.5rem 0;font-size:.95rem;text-align:center}.lh{margin:.8rem 0 .4rem;color:var(--gd);font-size:1.05rem}.lh small{color:var(--mut)}
+.big{font-family:var(--dz);font-size:clamp(4rem,20vw,7rem);line-height:1.8;text-align:center;color:var(--gd)}
+.layers{display:flex;flex-direction:column;gap:.35rem;align-items:center;margin:.4rem 0}
+.layer{display:flex;align-items:center;gap:.8rem;min-width:min(380px,100%);padding:.2rem .9rem;border-radius:12px;background:#f4f9f1}
+.layer b{font-family:var(--dz);font-size:2.2rem;line-height:1.6;width:3rem;text-align:center;color:var(--am)}
+.layer small{color:var(--mut)} .row{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;margin-top:.5rem}
+.step{text-align:center;min-height:1.6rem;color:var(--gd);font-weight:600}
+.big{font-size:clamp(3.2rem,14vw,5rem)!important;line-height:1.6!important}
+.lrow{display:flex;flex-wrap:wrap;gap:.35rem;justify-content:center;margin:.4rem 0}
+.lt{width:4.2rem;text-align:center;border:3px solid #d9e6d4;border-radius:14px;background:#f4f9f1;padding:.1rem .1rem .25rem;cursor:pointer;transition:all .3s}
+.lt b{display:block;font-family:var(--dz);font-size:2rem;line-height:1.5;color:var(--mut)}.lt .dz{display:block;font-size:.85rem;line-height:1.3;color:var(--mut)}.lt small{display:block;font-size:.58rem;color:var(--mut)}
+.chip.done::after{content:'\2713';color:var(--ok);font-family:Fredoka,sans-serif;font-size:1rem;font-weight:700;vertical-align:top;margin-left:.15rem}
+#stats{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}#stats b{font-size:1.15rem;color:var(--gd)}.bar{flex:1;min-width:140px;height:14px;border-radius:99px;background:#e7efe3;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#16a34a,#fbbf24);transition:width .6s}
+.cf{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:98}.cf span{position:absolute;top:-2rem;font-size:1.8rem;animation:fl 1.9s ease-in forwards}
+@keyframes fl{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}.pulse{animation:pu .9s infinite}@keyframes pu{50%{transform:scale(1.08)}}
+.fly{position:fixed;z-index:97;pointer-events:none;text-align:center;color:var(--ok);font-family:var(--dz);line-height:1.5;font-weight:700}
+.pop{animation:pop .55s cubic-bezier(.3,1.4,.5,1)}@keyframes pop{0%{transform:scale(.8);opacity:.3}60%{transform:scale(1.12);opacity:1}100%{transform:scale(1)}}
+.glow{animation:gl 1.3s}.pop.glow{animation:pop .55s cubic-bezier(.3,1.4,.5,1),gl 1.3s}@keyframes gl{0%,100%{text-shadow:none}40%{text-shadow:0 0 22px #4ade80,0 0 8px #fbbf24}}
+@media (prefers-reduced-motion:reduce){.pop,.glow,.pop.glow{animation:none}}
+.lt.on{border-color:var(--ok);background:#dcfce7}.lt.on b,.lt.on .dz,.lt.on small{color:var(--gd)}.lt.now{transform:translateY(-4px);box-shadow:0 4px 0 var(--ok)}
+/* game */
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.6rem;color:var(--mut)}
+select{font:inherit;padding:.4rem .8rem;border-radius:99px;border:2px solid #d9e6d4;background:#fff}
+.prev{font-family:var(--dz);font-size:clamp(4.5rem,22vw,8rem);line-height:1.8;text-align:center;min-height:1.8em;color:var(--gd)}
+.hint{text-align:center;font-size:1.15rem;margin-bottom:.4rem}
+.slots{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin:.6rem 0}
+.slot{width:76px;text-align:center;cursor:pointer}
+.slot .box{height:80px;border:3px dashed #b8cdb2;border-radius:16px;display:flex;align-items:center;justify-content:center;
+ font-family:var(--dz);font-size:2.4rem;background:#fff}
+.slot.fill .box{border-style:solid;border-color:var(--g);background:#f1f8ee}
+.slot.bad .box{border-color:var(--bad);background:#fee2e2}.slot.good .box{border-color:var(--ok);background:#dcfce7}
+.slot .dz{font-size:1.15rem;line-height:1.5;display:block;color:var(--am)} .slot small{display:block;color:var(--mut);font-size:.72rem}
+.tray{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin:.5rem 0}
+.tile{font-family:var(--dz);font-size:2.3rem;line-height:1.5;width:64px;height:64px;border-radius:14px;border:2px solid #cfdfc9;background:#fff;cursor:pointer;
+ box-shadow:0 3px 0 #cfdfc9;display:flex;align-items:center;justify-content:center}
+.tile.sel{border-color:var(--am);background:#fff3da;transform:translateY(-3px)}.tile.used{visibility:hidden}
+.shake{animation:sh .4s}@keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.fb{text-align:center;font-size:1.25rem;font-weight:600;min-height:2.2rem;margin:.4rem 0}.fb.ok{color:var(--ok)}.fb.bad{color:var(--bad)}
+.stars{font-size:3rem;color:#f59e0b;letter-spacing:.2em;text-align:center}
+/* splash */
+.splash{position:fixed;inset:0;z-index:99;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;
+ background:radial-gradient(120% 90% at 50% 20%,#1f6a26,#14451a 55%,#0c2c10);transition:opacity .6s,visibility .6s}
+.splash.out{opacity:0;visibility:hidden}.st{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;opacity:0;visibility:hidden}
+.splash.s1 .a{visibility:visible;animation:fa 2.9s forwards}.splash.s2 .b{opacity:1;visibility:visible;animation:ri .9s both}
+@keyframes fa{0%{opacity:0;transform:translateY(14px)}22%,78%{opacity:1;transform:none}100%{opacity:0}}@keyframes ri{from{opacity:0;transform:translateY(18px)}to{opacity:1}}
+.splash .br{font-size:1.05rem;color:rgba(255,255,255,.78)}.splash .nm{font-size:clamp(2.6rem,9vw,4.6rem);font-weight:700}
+.splash .nm::after{content:"";display:block;width:64px;height:4px;border-radius:4px;margin:1rem auto 0;background:linear-gradient(90deg,#d97706,#fbbf24)}
+.splash .t{font-family:var(--dz);font-size:clamp(3.4rem,14vw,6.5rem);line-height:1.7;text-shadow:0 4px 24px rgba(0,0,0,.35)}
+.splash .sub{color:#fbbf24;letter-spacing:.12em;font-weight:500;margin-bottom:2rem}
+.splash .go{font:inherit;font-size:1.25rem;font-weight:600;color:var(--gd);background:#fbbf24;border:0;border-radius:99px;padding:.8rem 2.4rem;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:1.4rem;transform:translateX(-50%);background:#1e293b;color:#fff;padding:.6rem 1.2rem;border-radius:99px;z-index:100}
+</style></head><body>
+<div class="splash s1" id="splash">
+ <div class="st a"><p class="br">Brought to you by</p><p class="nm">SherigSpace</p></div>
+ <div class="st b"><h1 class="t" style="color:#fff">བརྩེགས་ཡིག</h1><p class="sub">SPELL THE STACK</p><button class="go" id="go" type="button">Start &#9654;</button></div>
+</div>
+<div class="wrap">
+ <header><h1><span class="dz">བརྩེགས་ཡིག</span>Spell the Stack</h1>
+  <div class="tabs"><button class="tab on" data-v="learn">1 · Learn</button><button class="tab" data-v="game">2 · Spell game</button></div></header>
+ <section id="learn"></section>
+ <section id="game" class="hidden"></section>
+</div>
+<div id="toast" class="toast hidden"></div>
+<script src="words.js"></script>
+<script>
+/* ===== DATA (edit here) =====
+   p=prefix u=top letter r=root f=bottom letter v=vowel s=suffix x=post-suffix
+   Audio: audio/<id>.mp3 (e.g. audio/s01.mp3) */
+var ROLES=[['p','སྔོན་འཇུག','Prefix'],['u','མགོ་ཡིག','Top letter'],['r','གཞི་ཡིག','Root letter'],['f','འདོགས་ཡིག','Bottom letter'],
+ ['v','དབྱངས','Vowel'],['s','རྗེས་འཇུག','Suffix'],['x','ཡང་འཇུག','Post-suffix']];
+var CATS=[
+ {k:'ya',dz:'ཡ་བཏགས',en:'Ya subscript',d:'The letter ཡ hangs under the root letter: ཀྱ ཁྱ གྱ པྱ ཕྱ བྱ མྱ'},
+ {k:'ra',dz:'ར་བཏགས',en:'Ra subscript',d:'The letter ར hangs under the root letter: ཀྲ ཁྲ གྲ ཏྲ ཐྲ དྲ པྲ ཕྲ བྲ སྲ'},
+ {k:'la',dz:'ལ་བཏགས',en:'La subscript',d:'The letter ལ hangs under the root letter: ཀླ གླ བླ ཟླ རླ སླ'},
+ {k:'rago',dz:'ར་མགོ',en:'Ra on top',d:'The letter ར sits on top of the root letter: རྐ རྒ རྔ རྗ རྟ རྡ རྣ རྦ རྨ རྩ རྫ'},
+ {k:'lago',dz:'ལ་མགོ',en:'La on top',d:'The letter ལ sits on top of the root letter: ལྐ ལྒ ལྔ ལྕ ལྗ ལྟ ལྡ ལྤ ལྦ ལྷ'},
+ {k:'sago',dz:'ས་མགོ',en:'Sa on top',d:'The letter ས sits on top of the root letter: སྐ སྒ སྔ སྙ སྟ སྡ སྣ སྤ སྦ སྨ སྩ'}];
+var LV=['','Stack + vowel','Stack + simple suffix (ག ང བ མ འ པ)','Stack + suffix that changes the sound (ད ན ར ལ ས)','Prefix + stack','Post-suffix (ད ས)'];
+var SN={'ག':'ག closes the sound with a short, held /k/.','ང':'ང closes the sound with the nasal /ng/.','བ':'བ closes the sound with a soft /p/.','པ':'པ closes the sound with a soft /p/.','མ':'མ closes the sound with /m/.','འ':'འ is silent; it only lengthens the vowel.',
+ 'ད':'ད is not pronounced; it changes the vowel (a → ä, o → ö, u → ü).','ན':'ན gives a nasal /n/ and changes the vowel (a → ä, o → ö, u → ü).','ལ':'ལ changes the vowel (a → ä, o → ö, u → ü); the /l/ is soft or lost.','ར':'ར is not pronounced; it changes the vowel (a → ä, o → ö, u → ü).','ས':'ས is not pronounced; it changes the vowel (a → ä, o → ö, u → ü).'};
+function hx(s){return Array.from(s).map(function(c){return c.codePointAt(0).toString(16)}).join('-')}
+var W=SYL.map(function(o){o.id='audio/syl/'+hx(o.c)+'.mp3';o.h=o.m||(o.e&&o.e.length?'in the word '+o.e[0].replace(o.c,'\u25FB'):'listen, then spell');o.rare=o.n<50&&!o.m;return o});
+var CONS='ཀཁགངཅཆཇཉཏཐདནཔཕབམཙཚཛཝཞཟའརལཤསཧཡ'.split(''),VOW='ིེོུ'.split('');
+var $=function(i){return document.getElementById(i)};
+var sj=function(c){return String.fromCharCode(c.charCodeAt(0)+0x50)};
+function comp(o){return(o.p||'')+(o.u?o.u+(o.r?sj(o.r):''):(o.r||''))+(o.f?sj(o.f):'')+(o.v||'')+(o.s||'')+(o.x||'')}
+function parts(w){return ROLES.filter(function(r){return w[r[0]]})}
+function shuf(a){return a.slice().sort(function(){return Math.random()-.5})}
+function toast(m){var t=$('toast');t.textContent=m;t.classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.add('hidden')},1800)}
+var PL=[];function stopAll(){PL.forEach(function(a){try{a.pause()}catch(e){}});PL=[]}
+function play(p,r){return new Promise(function(res){var a=new Audio(p),d=0;PL.push(a);function f(k){if(!d){d=1;res(k)}}a.playbackRate=r||1;a.onended=function(){f(1)};a.onerror=function(){f(0)};a.play().catch(function(){f(0)})})}
+function hear(p){play(p,1).then(function(ok){if(!ok)toast('Audio coming soon')})}
+/* ---- splash ---- */
+(function(){var s=$('splash'),done=0;function two(){if(done)return;s.classList.remove('s1');s.classList.add('s2')}
+ setTimeout(two,2800);s.querySelector('.a').onclick=two;
+ $('go').onclick=function(){done=1;s.classList.add('out');setTimeout(function(){s.style.display='none'},650)}})();
+/* ---- tabs ---- */
+document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){
+ document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x===b)});
+ $('learn').classList.toggle('hidden',b.dataset.v!=='learn');$('game').classList.toggle('hidden',b.dataset.v!=='game');
+ if(b.dataset.v==='game'&&!$('game').innerHTML)gameMenu()}});
+/* ---- animation ---- */
+function popBig(t,g){var e=$('bigS');e.textContent=t||'\u00A0';e.classList.remove('pop','glow');void e.offsetWidth;e.classList.add('pop');if(g)e.classList.add('glow')}
+function fly(t,ms){return new Promise(function(res){var b=t&&t.querySelector('b'),e=$('bigS');
+ if(!b||!e||!b.animate||(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches))return res();
+ var r=b.getBoundingClientRect(),q=e.getBoundingClientRect(),f=document.createElement('div');f.className='fly';f.textContent=b.textContent;
+ f.style.cssText='left:'+r.left+'px;top:'+r.top+'px;width:'+r.width+'px;height:'+r.height+'px;font-size:'+getComputedStyle(b).fontSize;document.body.appendChild(f);
+ var dx=q.left+q.width/2-(r.left+r.width/2),dy=q.top+q.height/2-(r.top+r.height/2),d=0;function end(){if(!d){d=1;f.remove();res()}}
+ var a=f.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:'translate('+dx+'px,'+dy+'px) scale(2.2)',opacity:.85}],{duration:ms,easing:'cubic-bezier(.25,.8,.25,1)'});
+ a.onfinish=end;setTimeout(end,ms+300)})}
+/* ---- rewards ---- */
+var TT=[[0,'Beginner \uD83C\uDF31'],[5,'Sprout \uD83C\uDF3F'],[15,'Climber \uD83E\uDDD7'],[30,'Stack Star \u2B50'],[60,'Stack Master \uD83C\uDFC6'],[100,'Champion \uD83D\uDC51'],[200,'Dragon Legend \uD83D\uDC09']],
+ PR=['Well done!','Super!','Excellent!','Brilliant!','You did it!','Great spelling!','Amazing!','Wonderful!'];
+function ldDone(){try{return JSON.parse(localStorage.getItem('sts_done')||'{}')}catch(e){return{}}}
+var DONE=ldDone();function svDone(){try{localStorage.setItem('sts_done',JSON.stringify(DONE))}catch(e){}}
+function ttl(n){var i=0;TT.forEach(function(t,k){if(n>=t[0])i=k});return i}
+function updStats(){var n=Object.keys(DONE).length,i=ttl(n),nx=TT[i+1],e=$('stats');if(!e)return;
+ e.innerHTML='<b>\u2B50 '+n+'</b><b>'+TT[i][1]+'</b>'+(nx?'<div class="bar"><i style="width:'+Math.round(100*(n-TT[i][0])/(nx[0]-TT[i][0]))+'%"></i></div><small>'+(nx[0]-n)+' more for '+nx[1]+'</small>':'<small>You are a legend!</small>')}
+function chime(){try{var C=new(window.AudioContext||window.webkitAudioContext)();[523,659,784,1047].forEach(function(f,i){var o=C.createOscillator(),g=C.createGain();o.frequency.value=f;o.connect(g);g.connect(C.destination);
+ var t=C.currentTime+i*.12;g.gain.setValueAtTime(.15,t);g.gain.exponentialRampToValueAtTime(.001,t+.35);o.start(t);o.stop(t+.4)})}catch(e){}}
+function celebrate(big){var c=document.createElement('div');c.className='cf';var E=['\u2B50','\uD83C\uDF89','\u2728','\uD83C\uDF1F','\uD83C\uDF8A'],n=big?60:28;
+ for(var i=0;i<n;i++){var x=document.createElement('span');x.textContent=E[i%E.length];x.style.left=Math.random()*96+'%';x.style.animationDelay=Math.random()*.7+'s';c.appendChild(x)}
+ document.body.appendChild(c);setTimeout(function(){c.remove()},3000);chime()}
+function reward(w){var fresh=!DONE[w.id],b=ttl(Object.keys(DONE).length);popBig(w.c,1);
+ if(fresh){DONE[w.id]=1;svDone();document.querySelectorAll('.chip').forEach(function(x){if(x.dataset.id===w.id)x.classList.add('done')})}
+ var a=ttl(Object.keys(DONE).length);celebrate(a>b);updStats();
+ $('stepT').textContent='\u2714 '+PR[Math.floor(Math.random()*PR.length)]+' '+(fresh?'\u2B50 +1 ':'')+(w.m||'');
+ if(a>b)toast('New title: '+TT[a][1]);var nb=$('lnx');if(nb)nb.classList.add('pulse')}
+function go(d){var cs=[].slice.call(document.querySelectorAll('.chip')),i=cs.findIndex(function(x){return x.classList.contains('on')}),j=i+d;if(j<0)return;
+ if(j>=cs.length){celebrate(1);return toast('\uD83C\uDFC6 You finished this list!')}
+ pick(cs[j]);cs[j].scrollIntoView({block:'nearest',behavior:'smooth'});diyReset(W.filter(function(x){return x.id===cs[j].dataset.id})[0],1)}
+function pick(b){clearTimeout(timer);tok++;stopAll();document.querySelectorAll('.chip').forEach(function(x){x.classList.toggle('on',x===b)});showW(W.filter(function(x){return x.id===b.dataset.id})[0])}
+/* ---- LEARN ---- */
+var LS={t:'ya',l:0,rare:0,slow:0},timer,tok=0;
+function unitOf(w){return comp({u:w.u,r:w.r,f:w.f,v:w.v})}
+function unitPath(w){var u=unitOf(w);return u===w.c?w.id:'audio/unit/'+hx(u)+'.mp3'}
+function wait(ms){return new Promise(function(r){timer=setTimeout(r,ms)})}
+function renderLearn(){tok++;var c=CATS.filter(function(x){return x.k===LS.t})[0],h='<div class="card" id="stats"></div><div class="card"><div class="ctl">';
+ CATS.forEach(function(x){h+='<button class="pill'+(x.k===LS.t?' on':'')+'" data-t="'+x.k+'"><span class="dz">'+x.dz+'</span></button>'});
+ h+='</div><div class="ctl"><button class="pill'+(LS.l?'':' on')+'" data-l="0">All levels (easy → hard)</button>';
+ for(var l=1;l<=5;l++)h+='<button class="pill'+(LS.l===l?' on':'')+'" data-l="'+l+'">Level '+l+'</button>';
+ h+='</div><label class="rr"><input type="checkbox" id="rare"'+(LS.rare?' checked':'')+'> also show rare / old syllables</label></div>';
+ h+='<div class="card cat"><h3><span class="dz">'+c.dz+'</span>'+c.en+'</h3><p>'+c.d+'</p>';
+ for(var l=1;l<=5;l++){if(LS.l&&LS.l!==l)continue;var L=W.filter(function(w){return w.t===LS.t&&w.l===l&&(LS.rare||!w.rare)});if(!L.length)continue;
+  h+='<h4 class="lh">Level '+l+' · '+LV[l]+' <small>('+L.length+')</small></h4><div class="chips">';
+  L.forEach(function(w){h+='<button class="chip'+(DONE[w.id]?' done':'')+'" data-id="'+w.id+'">'+w.c+'</button>'});h+='</div>'}
+ h+='</div><div class="card hidden" id="explain"></div>';$('learn').innerHTML=h;
+ $('rare').onchange=function(){LS.rare=this.checked?1:0;renderLearn()};updStats()}
+function lp(c){return'audio/letter/'+hx(c)+'.mp3'}
+function showW(w){var ex=$('explain');ex.classList.remove('hidden');
+ var L='';parts(w).forEach(function(r){var c=w[r[0]];L+='<div class="lt on" data-k="'+r[0]+'" data-c="'+c+'"><b>'+(r[0]==='v'?'\u25CC'+c:c)+'</b><span class="dz">'+r[1]+'</span><small>'+r[2]+'</small></div>'});
+ ex.innerHTML='<div class="big" id="bigS">'+w.c+'</div><div class="step" id="stepT">'+(w.m||'')+'</div><div class="lrow" id="lrow">'+L+'</div>'+
+  (w.e&&w.e.length?'<div style="text-align:center">Words: '+w.e.map(function(x){return'<span class="ex">'+x+'</span>'}).join('')+'</div>':'')+
+  (w.s&&SN[w.s]?'<div class="note">Sound guide: '+SN[w.s]+'</div>':'')+
+  '<div class="row"><button class="btn amb" id="watch" type="button">&#9654; Build it slowly</button><button class="btn amb" id="diy" type="button">&#9995; Build it yourself</button><button class="btn pri" id="hr" type="button">&#128266; Hear the word</button>'+
+  '<button class="btn" id="hu" type="button">Hear the root</button>'+
+  '<button class="btn" id="sp" type="button">Speed: '+(LS.slow?'Slow':'Normal')+'</button></div><div class="row"><button class="btn" id="lbk" type="button">&#9664; Back</button><button class="btn pri" id="lnx" type="button" style="font-size:1.2rem;padding:.6rem 2rem">Next &#9654;</button></div>';
+ $('hr').onclick=function(){hear(w.id)};$('hu').onclick=function(){hear(unitPath(w))};
+ LS.diy=null;$('lrow').onclick=function(e){var t=e.target.closest('.lt');if(t)diyClick(w,t)};
+ $('diy').onclick=function(){diyReset(w,1)};$('lnx').onclick=function(){go(1)};$('lbk').onclick=function(){go(-1)};
+ $('sp').onclick=function(){LS.slow=LS.slow?0:1;this.textContent='Speed: '+(LS.slow?'Slow':'Normal')};
+ $('watch').onclick=function(){build(w)}}
+function diyReset(w,hint){clearTimeout(timer);tok++;stopAll();LS.diy={w:w,lit:{}};
+ document.querySelectorAll('#lrow .lt').forEach(function(x){x.classList.remove('on','now')});
+ if(hint){$('bigS').innerHTML='&nbsp;';$('stepT').textContent='Tap the letters below to build the word'}}
+function diyClick(w,t){if(!LS.diy||LS.diy.w!==w)diyReset(w,0);else{clearTimeout(timer);tok++;stopAll()}
+ var k=t.dataset.k,lit=LS.diy.lit,add=!lit[k],ps=parts(w).map(function(r){return r[0]});
+ document.querySelectorAll('#lrow .lt').forEach(function(x){x.classList.remove('now')});
+ if(add){lit[k]=w[k];t.classList.add('on','now')}else{delete lit[k];t.classList.remove('on')}
+ var n=Object.keys(lit).length,all=ps.every(function(q){return lit[q]});
+ var nb=$('lnx');if(nb)nb.classList.remove('pulse');
+ $('stepT').textContent=all?'':(n?'Tap the next letter':'Tap the letters below to build the word');
+ var upd=function(){if(!LS.diy||LS.diy.w!==w)return;var l=LS.diy.lit;popBig(Object.keys(l).length?comp(l):'');if(add&&ps.every(function(q){return l[q]}))reward(w)};
+ if(add)fly(t,LS.slow?750:420).then(upd);else upd();
+ if(!add)return;
+ var a=[lp(w[k])],unit=['r','u','f','v'].filter(function(q){return w[q]}).every(function(q){return lit[q]});
+ if(all)a.push(w.id);
+ else if(unit&&'rufv'.indexOf(k)>=0&&(w.u||w.f||w.v))a.push(unitPath(w));
+ else if(unit&&k==='s'){var c=comp(lit);a.push(c===w.c?w.id:'audio/syl/'+hx(c)+'.mp3')}
+ var rate=LS.slow?0.7:1,my=tok,q=Promise.resolve();
+ a.forEach(function(p){q=q.then(function(){if(my!==tok)return;return play(p,rate).then(function(ok){return wait(ok?(LS.slow?500:200):0)})})})}
+function build(w){LS.diy=null;clearTimeout(timer);stopAll();var my=++tok,cur={},st=[],keys=['r','u','f','v','p','s','x'].filter(function(k){return w[k]}),nm={};
+ ROLES.forEach(function(r){nm[r[0]]=r[2]});
+ keys.forEach(function(k,i){cur[k]=w[k];var t=comp(cur),a=[lp(w[k])],rest=keys.slice(i+1);
+  if('rufv'.indexOf(k)>=0&&!rest.some(function(q){return'ufv'.indexOf(q)>=0})&&(w.u||w.f||w.v))a.push(unitPath(w));
+  if(k==='s')a.push(t===w.c?w.id:'audio/syl/'+hx(t)+'.mp3');
+  if(i===keys.length-1&&a[a.length-1]!==w.id)a.push(w.id);
+  st.push({k:k,t:t,a:a,l:(i+1)+' \u00B7 + '+nm[k]+' '+(k==='v'?'\u25CC'+w[k]:w[k])+(k==='s'&&SN[w[k]]?' \u2014 '+SN[w[k]]:'')})});
+ var rate=LS.slow?0.7:1,p=Promise.resolve();
+ document.querySelectorAll('#lrow .lt').forEach(function(x){x.classList.remove('on','now')});popBig('');
+ st.forEach(function(s){p=p.then(function(){if(my!==tok)return;$('stepT').textContent=s.l;
+  document.querySelectorAll('#lrow .lt').forEach(function(x){x.classList.remove('now');if(x.dataset.k===s.k)x.classList.add('on','now')});
+  var any=0,q=Promise.resolve(),fl=fly(document.querySelector('#lrow .lt[data-k="'+s.k+'"]'),LS.slow?900:450).then(function(){if(my===tok)popBig(s.t)});
+  s.a.forEach(function(path){q=q.then(function(){if(my!==tok)return;return play(path,rate).then(function(ok){if(ok)any=1;return wait(ok?(LS.slow?700:300):0)})})});
+  return Promise.all([q,fl]).then(function(){if(my!==tok)return;if(!any)$('stepT').textContent=s.l+'  \uD83D\uDD07 (audio not recorded yet)';return wait(any?(LS.slow?900:400):(LS.slow?2600:1200))})})});
+ p.then(function(){if(my===tok){document.querySelectorAll('#lrow .lt').forEach(function(x){x.classList.remove('now')});popBig(w.c,1);$('stepT').textContent=w.m||'Whole syllable'}})}
+$('learn').onclick=function(e){var b=e.target.closest('[data-t],[data-l],.chip');if(!b)return;
+ if(b.dataset.t){LS.t=b.dataset.t;return renderLearn()}if(b.dataset.l!==undefined){LS.l=+b.dataset.l;return renderLearn()}
+ pick(b)};
+renderLearn();
+/* ---- GAME ---- */
+var G={};
+function gameMenu(){var o='<option value="all">All stacks</option>',lo='<option value="0">All levels</option>';CATS.forEach(function(c){o+='<option value="'+c.k+'">'+c.dz+' \u00B7 '+c.en+'</option>'});
+ for(var l=1;l<=5;l++)lo+='<option value="'+l+'">Level '+l+' \u00B7 '+LV[l]+'</option>';
+ $('game').innerHTML='<div class="card" style="text-align:center"><h2 style="margin-bottom:.6rem">Spell the Stack</h2><p style="color:var(--mut);margin-bottom:1rem">Read the hint, then put each letter in its place to spell the syllable. Learn the stacks first in tab 1.</p>'+
+  '<p style="margin-bottom:.6rem"><select id="gc">'+o+'</select></p><p style="margin-bottom:1rem"><select id="gl">'+lo+'</select></p><button class="btn pri" id="gs" type="button" style="font-size:1.2rem">Start &#9654;</button></div>';
+ $('gs').onclick=function(){var c=$('gc').value,l=+$('gl').value,pool=W.filter(function(w){return(c==='all'||w.t===c)&&(!l||w.l===l)&&!w.rare});
+  if(!pool.length)return toast('No syllables here');G.q=shuf(pool).slice(0,6);G.i=0;G.sc=0;nextQ()}}
+function nextQ(){if(G.i>=G.q.length)return endG();var w=G.q[G.i];G.w=w;G.tries=0;G.sel=null;G.lock=false;G.fill={};G.msg=null;G.res=null;
+ var need=parts(w).map(function(r){return r[0]}),tc=[],tv=[],n=0;
+ need.forEach(function(k){var t={id:'t'+(n++),ch:w[k],kind:k==='v'?'v':'c'};(t.kind==='v'?tv:tc).push(t)});
+ var used=need.map(function(k){return w[k]});
+ shuf(CONS.filter(function(c){return used.indexOf(c)<0})).slice(0,3).forEach(function(c){tc.push({id:'t'+(n++),ch:c,kind:'c'})});
+ if(w.v||Math.random()<.5)shuf(VOW.filter(function(c){return c!==w.v})).slice(0,1).forEach(function(c){tv.push({id:'t'+(n++),ch:c,kind:'v'})});
+ G.tc=shuf(tc);G.tv=shuf(tv);G.need=need;drawQ()}
+function drawQ(){var w=G.w,o={};G.need.forEach(function(k){if(G.fill[k])o[k]=G.fill[k].ch});
+ var S='';parts(w).forEach(function(r){var t=G.fill[r[0]],st=G.res?(G.res[r[0]]?'good':'bad'):'';
+  S+='<div class="slot'+(t?' fill':'')+' '+st+'" data-k="'+r[0]+'"><div class="box">'+(t?(r[0]==='v'?'\u25CC':'')+t.ch:'')+'</div><span class="dz">'+r[1]+'</span><small>'+r[2]+'</small></div>'});
+ function tr(a){return a.map(function(t){var u=Object.keys(G.fill).some(function(k){return G.fill[k]===t});
+  return'<button class="tile'+(u?' used':'')+(G.sel===t?' sel':'')+'" data-t="'+t.id+'">'+(t.kind==='v'?'\u25CC':'')+t.ch+'</button>'}).join('')}
+ $('game').innerHTML='<div class="card"><div class="top"><span>Word '+(G.i+1)+' of '+G.q.length+' · Score '+G.sc+'</span><span><button class="btn" id="hq" type="button">&#128266; Hear it</button></span></div>'+
+  '<div class="prev" id="pv">'+(o.r?comp(o):'')+'</div><div class="hint">Meaning: <b>'+w.h+'</b></div><div class="slots" id="sl">'+S+'</div>'+
+  '<div class="tray" id="tc">'+tr(G.tc)+'</div><div class="tray" id="tv">'+tr(G.tv)+'</div><div class="fb" id="fb"></div>'+
+  '<div class="row"><button class="btn pri" id="chk" type="button" disabled>Check &#10003;</button><button class="btn hidden amb" id="nx" type="button">Next &#9654;</button></div></div>';
+ $('hq').onclick=function(){hear(w.id)};
+ $('chk').disabled=G.need.some(function(k){return !G.fill[k]})||G.lock;
+ $('chk').onclick=check;$('nx').onclick=function(){G.i++;G.res=null;nextQ()};
+ if(G.lock)$('nx').classList.remove('hidden');
+ if(G.msg){$('fb').textContent=G.msg[0];$('fb').className='fb '+G.msg[1]}
+ [$('tc'),$('tv')].forEach(function(el){el.onclick=function(e){var b=e.target.closest('.tile');if(!b||G.lock)return;
+  var t=G.tc.concat(G.tv).filter(function(x){return x.id===b.dataset.t})[0];G.sel=(G.sel===t?null:t);G.msg=null;G.res=null;drawQ()}});
+ $('sl').onclick=function(e){var s=e.target.closest('.slot');if(!s||G.lock)return;var k=s.dataset.k;G.res=null;G.msg=null;
+  if(G.sel){var ok=(k==='v')===(G.sel.kind==='v');if(!ok){s.classList.add('shake');toast(k==='v'?'This slot needs a vowel':'This slot needs a letter, not a vowel');return}
+   G.fill[k]=G.sel;G.sel=null}else if(G.fill[k])delete G.fill[k];drawQ()}}
+function check(){var w=G.w,res={},all=true;
+ G.need.forEach(function(k){res[k]=G.fill[k].ch===w[k];if(!res[k])all=false});G.tries++;
+ if(all){G.sc++;celebrate();G.lock=true;G.res=res;G.msg=['\u2714 Well done! '+comp(w),'ok'];return drawQ()}
+ if(G.tries>=2){G.lock=true;G.need.forEach(function(k){G.fill[k]={ch:w[k]}});G.res={};G.need.forEach(function(k){G.res[k]=true});
+  G.msg=['\u2716 This is the correct spelling: '+comp(w),'bad'];return drawQ()}
+ G.need.forEach(function(k){if(!res[k])delete G.fill[k]});G.res=res;
+ G.msg=['\u2716 Not quite. Put the right letter in the red boxes, then check again.','bad'];drawQ()}
+function endG(){var n=G.q.length,st=Math.round(3*G.sc/n);
+ $('game').innerHTML='<div class="card" style="text-align:center"><h2>Well done!</h2><p class="stars">'+'\u2605'.repeat(st)+'\u2606'.repeat(3-st)+'</p><p style="margin:.6rem 0 1rem">You spelled '+G.sc+' out of '+n+' correctly.</p>'+
+  '<button class="btn pri" id="ag" type="button">Play again</button> <button class="btn" id="mn" type="button">Choose group</button></div>';
+ $('ag').onclick=function(){G.i=0;G.sc=0;G.q=shuf(G.q);nextQ()};$('mn').onclick=gameMenu}
+</script></body></html>
